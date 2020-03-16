@@ -3,57 +3,73 @@ from django.utils.html import format_html_join
 from django.utils.safestring import mark_safe
 from django.contrib.contenttypes.admin import  GenericTabularInline, GenericStackedInline 
 
-from .models import Relation,Relationship
+
+#from genericadmin.admin import GenericAdminModelAdmin, TabularInlineWithGeneric
+
+from .models import Relationship
 from .models import Person, Funder, Organisation
-from .models import ResearchCategory, ResearchArea, ResearchProject
+from .models import ResearchCategory, ResearchArea, ResearchProject, HEResearchArea, HEResearchCategory
 
-
+from  django.contrib.contenttypes.admin import GenericInlineModelAdmin
 ####################### RELATIONSHIPS ####################
 
-class RelationInline(GenericTabularInline):
-    model = Relation
-    extra = 1
+'''class RelationshipInline(GenericAdminModelAdmin, GenericTabularInline):
+    model = Relationship'''
 
-class RelationAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'content_object', )
+
+
+class RelationshipAdminInLine( GenericInlineModelAdmin ):#GenericAdminModelAdmin):
+    model = Relationship
+
     
- 
 
-class OtherOjectInline(GenericStackedInline):
-    model = Relationship
-    extra = 1
-
-class RelationshipInline(GenericStackedInline):
-    model = Relationship
-    extra = 1
-
-
-class RelationshipAdmin(admin.ModelAdmin):
-    exclude = ['reverse_name' ]
-    list_display = ('__str__', 'kind','reverse_name' )
-    search_fields = ['kind', "reverse_name"]
-
-    inlines = [RelationInline]
 
 ####################### CONTENT OBJECTS ####################
 
 class PersonInline(admin.StackedInline):
     model = Person
+    inlines = [ RelationshipAdminInLine ]
 
+
+class PersonAdmin(admin.ModelAdmin):
+    ''
+ 
 
 class ResearchProjectAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-    inlines = [RelationshipInline,RelationInline]
+    ''
 
 
-admin.site.register(Relationship, RelationshipAdmin)
-admin.site.register(Relation)
+
+class HEResearchCategoryInline(admin.StackedInline):
+    model = HEResearchCategory
+    #inlines = [ RelationshipInline ]
+
+
+class HEResearchCategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', )
+    #inlines = [ RelationshipInline ]
+
+class HEResearchAreaAdmin(admin.ModelAdmin):
+    #list_display = ('name','hecatname')
+    list_filter = ['hecategory',]
+    #inlines = [HEResearchCategoryInline]
+    #inlines = [ RelationshipInline ]
+
+
+admin.site.register(Relationship)
 
 ### CONTENT OBJECTS ####
-admin.site.register(Person)
+
+admin.site.register(Person, PersonAdmin)
 admin.site.register(Funder)
 admin.site.register(Organisation)
 admin.site.register(ResearchCategory)
 admin.site.register(ResearchArea)
-admin.site.register(ResearchProject)
+admin.site.register(HEResearchCategory, HEResearchCategoryAdmin)
+admin.site.register(HEResearchArea, HEResearchAreaAdmin)
+admin.site.register(ResearchProject, ResearchProjectAdmin)
+
+#admin.site.register( Relationship, RelationshipAdmin)
+
+
 ### END CONTENT OBJECTS ####
