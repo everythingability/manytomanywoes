@@ -10,7 +10,7 @@ from django.conf import settings
 
 ###################### RELATIONSHIP OBJECTS ############################
 
-from genericadmin.admin import GenericAdminModelAdmin
+#from genericadmin.admin import GenericAdminModelAdmin
 
 class Relationship(models.Model):
 	class Meta:

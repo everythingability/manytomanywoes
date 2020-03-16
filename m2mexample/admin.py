@@ -4,7 +4,7 @@ from django.utils.safestring import mark_safe
 from django.contrib.contenttypes.admin import  GenericTabularInline, GenericStackedInline 
 
 
-#from genericadmin.admin import GenericAdminModelAdmin, TabularInlineWithGeneric
+#from genericadmin.admin import GenericAdminModelAdmin, TabularInlineWithGeneric, GenericInlineModelAdmin
 
 from .models import Relationship
 from .models import Person, Funder, Organisation
@@ -18,7 +18,7 @@ from  django.contrib.contenttypes.admin import GenericInlineModelAdmin
 
 
 
-class RelationshipAdminInLine( GenericInlineModelAdmin ):#GenericAdminModelAdmin):
+class RelationshipAdminInLine( GenericTabularInline ):#GenericAdminModelAdmin):
     model = Relationship
 
     
